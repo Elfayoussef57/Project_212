@@ -20,6 +20,20 @@ def main():
         BATCH_SIZE = 32
         IMG_SIZE = (160, 160)
         directory = "../../chest_xray"
+        train_dataset = image_dataset_from_directory(directory,
+                                                shuffle=True,
+                                                batch_size=BATCH_SIZE,
+                                                image_size=IMG_SIZE,
+                                                validation_split=0.2,
+                                                subset='training',
+                                                seed=42)
+        validation_dataset = image_dataset_from_directory(directory,
+                                                shuffle=True,
+                                                batch_size=BATCH_SIZE,
+                                                image_size=IMG_SIZE,
+                                                validation_split=0.2,
+                                                subset='validation',
+                                                seed=42)
 
         
       
