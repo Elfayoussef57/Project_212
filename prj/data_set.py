@@ -3,10 +3,7 @@ import json
 import numpy as np
 import os
 import tensorflow as tf
-import tensorflow.keras.layers as tfl
 
-from tensorflow.keras.preprocessing import image_dataset_from_directory
-from tensorflow.keras.layers.experimental.preprocessing import RandomFlip, RandomRotation
 
 def import_data(path):
         path_dir = path
@@ -20,14 +17,14 @@ def main():
         BATCH_SIZE = 32
         IMG_SIZE = (160, 160)
         directory = "../../chest_xray"
-        train_dataset = image_dataset_from_directory(directory,
+        train_dataset = tf.keras.preprocessing.image_dataset_from_directory(directory,
                                                 shuffle=True,
                                                 batch_size=BATCH_SIZE,
                                                 image_size=IMG_SIZE,
                                                 validation_split=0.2,
                                                 subset='training',
                                                 seed=42)
-        validation_dataset = image_dataset_from_directory(directory,
+        validation_dataset = tf.keras.preprocessing.image_dataset_from_directory(directory,
                                                 shuffle=True,
                                                 batch_size=BATCH_SIZE,
                                                 image_size=IMG_SIZE,
