@@ -2,6 +2,7 @@ import tensorflow as tf
 import os
 import sys
 
+
 def load_data(data_dir):
         """
         Load the data from the dat folder directory.
@@ -16,7 +17,7 @@ def load_data(data_dir):
         VAL =   os.path.join(data_dir, 'val')
         try:
                 BATCH_SIZE = 32
-                IMG_SIZE = (160, 160)
+                IMG_SIZE = (256, 256)
                 # Load the test dataset
                 test_dataset = tf.keras.preprocessing.image_dataset_from_directory(TEST,
                                                         shuffle=True,
