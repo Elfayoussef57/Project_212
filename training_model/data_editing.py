@@ -119,6 +119,8 @@ def plot_examples(
         class_idx = np.argmax(labels[i])
         plt.title(f"Class: {class_names[class_idx]}")
         plt.axis('off')
+    plt.tight_layout()
+    plt.savefig(f"examples_{title}.png", dpi=300) if title else None
     
     plt.tight_layout()
     plt.show()
