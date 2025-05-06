@@ -1,14 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator # type: ignore
-from tensorflow.keras.models import Model # type: ignore
-from tensorflow.keras.models import load_model # type: ignore
-from tensorflow.keras.layers import Input, Dense, Flatten, Conv2D,Dropout # type: ignore
-from tensorflow.keras.applications.vgg19 import VGG19 # type: ignore
-from tensorflow.keras.optimizers import SGD, RMSprop, Adam # type: ignore
-from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau # type: ignore
-import matplotlib.pyplot as plt
-import numpy as np
-from data_pipeline import get_data
+
 
 def data_generator(data_path: str, batch_size: int = 32, img_size: int = 128) -> tf.data.Dataset:
     """
@@ -20,13 +12,13 @@ def data_generator(data_path: str, batch_size: int = 32, img_size: int = 128) ->
         tf.data.Dataset: A dataset object for training or validation.
     """
     train_datagen = ImageDataGenerator(rescale = 1. / 255, 
-                  horizontal_flip=0.4,
-                  vertical_flip=0.4,
-                  rotation_range=40,
-                  shear_range=0.2,
-                  width_shift_range=0.4,
-                  height_shift_range=0.4,
-                  fill_mode="nearest")
+                    horizontal_flip=0.4,
+                    vertical_flip=0.4,
+                    rotation_range=40,
+                    shear_range=0.2,
+                    width_shift_range=0.4,
+                    height_shift_range=0.4,
+                    fill_mode="nearest")
     valid_datagen = ImageDataGenerator(rescale = 1./255)
     test_datagen = ImageDataGenerator(rescale = 1./255)
 
