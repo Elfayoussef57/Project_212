@@ -10,6 +10,7 @@ from data_analysis import data_generator
 import matplotlib.pyplot as plt
 from sklearn.utils import class_weight
 import numpy as np
+from tensorflow.keras import backend as K # type: ignore
 
 def build_model() -> Model:
     # Charge VGG19 pré-entraîné
@@ -43,12 +44,17 @@ def merge_histories(h1, h2):
     return h1
 
 # Callbacks recommandés
-def get_callbacks():
-    filepath = "model_vgg.keras"
-    es = EarlyStopping(monitor="val_loss", patience=3, restore_best_weights=True)
-    cp=ModelCheckpoint(filepath, monitor="val_loss", save_best_only=True, save_weights_only=False,mode="auto", save_freq="epoch")
-    lrr = ReduceLROnPlateau(monitor="val_accuracy", patience=2, verbose=1, factor=0.5, min_lr=0.0001)
-    return [es, cp, lrr]
+def get_callbacks(filepath="model_vgg.keras"):
+    es = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
+    cp = ModelCheckpoint(
+        filepath, monitor='val_loss', save_best_only=True,
+        save_weights_only=False, mode='auto'
+    )
+    lr = ReduceLROnPlateau(
+        monitor='val_loss', factor=0.5, patience=2,
+        verbose=1, min_lr=1e-6
+    )
+    return [es, cp, lr]
 
 def plot_training(history):
     plt.figure(figsize=(12, 4))
@@ -76,23 +82,21 @@ def main():
     model.summary()
 
     # Chargement des données
-    train_generator = data_generator("../data/train", batch_size=32, img_size=224)
-    val_generator = data_generator("../data/val", batch_size=32, img_size=224)
+    train_generator = data_generator("../data/train", batch_size=16, img_size=224)
+    val_generator = data_generator("../data/val", batch_size=16, img_size=224)
+    test_generator = data_generator("../data/test", batch_size=16, img_size=224)
 
-    # Compute class weights
-    class_weights = class_weight.compute_class_weight(
-        class_weight='balanced',
-        classes=np.unique(train_generator.classes),
-        y=train_generator.classes
-    )
-    class_weights = dict(enumerate(class_weights))
+        # Class weights
+    classes = train_gen.classes
+    weights = class_weight.compute_class_weight('balanced', classes=np.unique(classes), y=classes)
+    class_weights = dict(enumerate(weights))
     print("Class Weights:", class_weights)
 
 
     # Entraînement avec data augmentation (exemple)
     history = model.fit(train_generator,
-            epochs=5, 
-            callbacks=get_callbacks(),
+            epochs=10, 
+            callbacks=get_callbacks("model_vgg.keras"),
             validation_data=val_generator,
             class_weight=class_weights
             )
@@ -111,15 +115,22 @@ def main():
         train_generator,
         validation_data=val_generator,
         epochs=20,
-        callbacks=get_callbacks(),
+        callbacks=get_callbacks("model_vgg.keras"),
         class_weight=class_weights
     )
 
     # Fusionner les historiques
     history_final = merge_histories(history, history_fine)
     plot_training(history_final)
+
+    # Evaluate on test set
+    test_metrics = model.evaluate(test_generator)
+    print("Test set metrics:", dict(zip(model.metrics_names, test_metrics)))
+
     # Sauvegarde du modèle
     model.save("model_vgg.keras")
+
+    K.clear_session() # Clear the session to free up resources
 
 
 if __name__ == "__main__":
