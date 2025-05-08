@@ -11,37 +11,39 @@ def data_generator(data_path: str, batch_size: int = 32, img_size: int = 128) ->
     Returns:
         tf.data.Dataset: A dataset object for training or validation.
     """
-    train_datagen = ImageDataGenerator(rescale = 1. / 255, 
-                    horizontal_flip=0.4,
-                    vertical_flip=0.4,
-                    rotation_range=40,
-                    shear_range=0.2,
-                    width_shift_range=0.4,
-                    height_shift_range=0.4,
-                    fill_mode="nearest")
+    train_datagen = ImageDataGenerator(
+        rescale=1. / 255,
+        horizontal_flip=True,              
+        rotation_range=10,                
+        width_shift_range=0.1,           
+        height_shift_range=0.1,
+        zoom_range=0.1,                   
+        shear_range=0.1,                  
+        fill_mode="nearest"
+    )
     valid_datagen = ImageDataGenerator(rescale = 1./255)
     test_datagen = ImageDataGenerator(rescale = 1./255)
 
     if data_path.__contains__("train"):
         data_gen = train_datagen.flow_from_directory(data_path,
-                                 batch_size = 32,
-                                 target_size=(128,128),
+                                 batch_size = batch_size,
+                                 target_size=(img_size,img_size),
                                  class_mode = 'categorical',
                                  shuffle=True,
                                  seed = 42,
                                  color_mode = 'rgb')
     elif data_path.__contains__("val"):
         data_gen = valid_datagen.flow_from_directory(data_path,
-                                 batch_size = 32,
-                                 target_size=(128,128),
+                                 batch_size = batch_size,
+                                 target_size=(img_size,img_size),
                                  class_mode = 'categorical',
                                  shuffle=True,
                                  seed = 42,
                                  color_mode = 'rgb')
     elif data_path.__contains__("test"):
         data_gen = test_datagen.flow_from_directory(data_path,
-                                 batch_size = 32,
-                                 target_size=(128,128),
+                                 batch_size = batch_size,
+                                 target_size=(img_size,img_size),
                                  class_mode = 'categorical',
                                  shuffle=True,
                                  seed = 42,
