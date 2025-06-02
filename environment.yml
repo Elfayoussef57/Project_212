@@ -38,6 +38,7 @@ dependencies:
       - cachetools==5.5.2
       - certifi==2025.4.26
       - cffi==1.17.1
+      - chardet==5.2.0
       - charset-normalizer==3.4.2
       - click==8.1.8
       - colorama==0.4.6
@@ -153,6 +154,7 @@ dependencies:
       - pyzmq==26.4.0
       - readme-renderer==44.0
       - referencing==0.36.2
+      - reportlab==4.4.1
       - requests==2.32.3
       - requests-oauthlib==2.0.0
       - requests-toolbelt==1.0.0
