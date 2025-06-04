@@ -50,7 +50,7 @@ if __name__ == "__main__":
     # 3) Charger le modèle
     model = tf.keras.models.load_model(model_path)
 
-    img_path = "../../data/Chest X_ray/test/PNEUMONIA/person139_bacteria_666.jpeg"
+    img_path = "../../data/Chest X_ray/test/NORMAL/IM-0003-0001.jpeg"
     img = tf.keras.preprocessing.image.load_img(img_path, target_size=(224, 224))
     img_array = tf.keras.preprocessing.image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0) / 255.0
