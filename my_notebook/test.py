@@ -9,7 +9,7 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array # type: 
 import pydicom
 from PIL import Image
 
-from grad_cam_vggv2 import grad_cam, find_last_conv_layer #type: ignore
+from model_cam import generate_gradcam, overlay_heatmap_on_image
 
 IMG_SIZE = 224
 MODEL_PATH = "../models/my_model_vggv2.h5"
@@ -67,27 +67,19 @@ def predict_with_heatmap(image_path):
     print(f"🔍 Prediction: {pred_class} ({confidence*100:.2f}%)")
 
     # Grad-CAM
-    heatmap = grad_cam(model, img_array)
+    cam_heatmap = generate_gradcam(model, img_array, class_index=1, last_conv_layer="conv2d_12")
+    original_image, cam_overlay = overlay_heatmap_on_image(cam_heatmap, image_path, (224,224))
 
-    # Prepare image for overlay
-    img_cv = cv2.imread(image_path)
-    img_cv = cv2.resize(img_cv, (IMG_SIZE, IMG_SIZE))
 
-    # Resize heatmap to match the user-defined size
-    heatmap = cv2.resize(heatmap.astype(np.float32), (IMG_SIZE,IMG_SIZE))
-    heatmap = np.uint8(255 * heatmap)
-    heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
-
-    superimposed_img = cv2.addWeighted(img_cv, 0.6, heatmap, 0.4, 0)
     # Show results
     plt.figure(figsize=(10, 5))
     plt.subplot(1, 2, 1)
-    plt.imshow(cv2.cvtColor(img_cv, cv2.COLOR_BGR2RGB))
+    plt.imshow(cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB))
     plt.title("Original Image")
     plt.axis('off')
 
     plt.subplot(1, 2, 2)
-    plt.imshow(cv2.cvtColor(superimposed_img, cv2.COLOR_BGR2RGB))
+    plt.imshow(cv2.cvtColor(cam_overlay, cv2.COLOR_BGR2RGB))
     plt.title(f"{pred_class} ({confidence*100:.2f}%)")
     plt.axis('off')
 
@@ -96,7 +88,7 @@ def predict_with_heatmap(image_path):
 
 # 🏁 Entry point
 if __name__ == "__main__":
-    image_path = "../data/RSNA/stage_2_test_images/0022bb50-bf6c-4185-843e-403a9cc1ea80.dcm"
+    image_path = "../data/RSNA/stage_2_test_images/00991acc-85b3-41c7-a397-bdf925c3697a.dcm"
     if image_path.endswith('.dcm'):
         image_path = dicom_to_png(image_path)
     predict_with_heatmap(image_path)
