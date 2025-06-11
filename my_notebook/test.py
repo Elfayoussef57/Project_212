@@ -88,7 +88,5 @@ def predict_with_heatmap(image_path):
 
 # 🏁 Entry point
 if __name__ == "__main__":
-    image_path = "../data/RSNA/stage_2_test_images/0041fc67-793c-4129-a952-ea3fb821b445.dcm"
-    if image_path.endswith('.dcm'):
-        image_path = dicom_to_png(image_path)
+    image_path = "../../Downloads/WhatsApp Image 2025-06-03 à 11.02.08_0ebe368b.jpg"
     predict_with_heatmap(image_path)

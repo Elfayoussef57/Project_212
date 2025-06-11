@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import os
+from PIL import Image
 
 from tensorflow.keras.models import load_model #type: ignore
 from tensorflow.keras.preprocessing import image #type: ignore
@@ -37,16 +38,18 @@ def generate_gradcam(model, img_array, class_index, last_conv_layer):
     cam = gradcam(score, img_array, penultimate_layer=last_conv_layer)
     return cam[0]
 
-
-def overlay_heatmap_on_image(cam_heatmap, original_image_path, display_size):
-    heatmap = cv2.resize(cam_heatmap, display_size)
+def overlay_heatmap_on_image(heatmap, image_path, display_size=(224,224), alpha=0.4):
+    pil_img = Image.open(image_path).convert("RGB")
+    pil_img = pil_img.resize(display_size)
+    original_image = np.array(pil_img)
+    original_image = cv2.cvtColor(original_image, cv2.COLOR_RGB2BGR)
+    
+    heatmap = cv2.resize(heatmap, display_size)
     heatmap = np.uint8(255 * heatmap)
-    heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+    heatmap_colored = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
 
-    original_image = cv2.imread(original_image_path)
-    original_image = cv2.resize(original_image, display_size)
-    superimposed_img = cv2.addWeighted(original_image, 0.6, heatmap, 0.4, 0)
-    return original_image, superimposed_img
+    overlay = cv2.addWeighted(original_image, 1 - alpha, heatmap_colored, alpha, 0)
+    return original_image, overlay
 
 
 def display_images(original, cam_image):
