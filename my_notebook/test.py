@@ -45,7 +45,7 @@ def dicom_to_png(dicom_path, output_dir="../data/RSNA/rsna_pneumonia_png_images"
 
     # Save image
     image.save(output_path)
-    print(f"✅ Saved PNG to: {output_path}")
+    print(f"+Saved PNG to: {output_path}")
     return output_path
 
 
@@ -64,10 +64,10 @@ def predict_with_heatmap(image_path):
     pred_class = "Pneumonia" if pred_prob > 0.5 else "Not-Pneumonia"
     confidence = pred_prob if pred_prob > 0.5 else 1 - pred_prob
 
-    print(f"🔍 Prediction: {pred_class} ({confidence*100:.2f}%)")
+    print(f"+Prediction: {pred_class} ({confidence*100:.2f}%)")
 
     # Grad-CAM
-    cam_heatmap = generate_gradcam(model, img_array, class_index=1, last_conv_layer="conv2d_12")
+    cam_heatmap = generate_gradcam(model, img_array, class_index=1, last_conv_layer="conv2d_10")
     original_image, cam_overlay = overlay_heatmap_on_image(cam_heatmap, image_path, (224,224))
 
 
@@ -88,7 +88,7 @@ def predict_with_heatmap(image_path):
 
 # 🏁 Entry point
 if __name__ == "__main__":
-    image_path = "../data/RSNA/stage_2_test_images/00991acc-85b3-41c7-a397-bdf925c3697a.dcm"
+    image_path = "../data/RSNA/stage_2_test_images/0041fc67-793c-4129-a952-ea3fb821b445.dcm"
     if image_path.endswith('.dcm'):
         image_path = dicom_to_png(image_path)
     predict_with_heatmap(image_path)

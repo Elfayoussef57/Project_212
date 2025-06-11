@@ -4,19 +4,19 @@ import matplotlib.pyplot as plt
 import cv2
 import os
 
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
+from tensorflow.keras.models import load_model #type: ignore
+from tensorflow.keras.preprocessing import image #type: ignore
 from tf_keras_vis.gradcam_plus_plus import GradcamPlusPlus
 from tf_keras_vis.utils.model_modifiers import ReplaceToLinear
 from tf_keras_vis.utils.scores import BinaryScore
 
 # --------- SETTINGS ---------
 MODEL_PATH = "../models/my_model_vggv2.h5"
-IMAGE_PATH = "../data/RSNA/rsna_pneumonia_png_images/0a0f91dc-6015-4342-b809-d19610854a21.png"
+IMAGE_PATH = "../data/RSNA/rsna_pneumonia_png_images/0ac789c5-f138-4b5d-9c2e-9ca25de243d8.png"
 INPUT_SIZE = (128, 128)
 DISPLAY_SIZE = (224, 224)
 CLASS_INDEX = 1
-LAST_CONV_LAYER = 'conv2d_12'
+LAST_CONV_LAYER = 'conv2d_10'
 
 
 def load_trained_model(path):
