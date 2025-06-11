@@ -9,7 +9,6 @@ dependencies:
   - ca-certificates=2025.4.26=h4c7d964_0
   - libzlib=1.3.1=h2466b09_2
   - openssl=3.5.0=ha4e3fda_1
-  - pip=25.1=pyhc872135_2
   - python=3.9.21=h8205438_1
   - setuptools=78.1.1=py39haa95532_0
   - sqlite=3.45.3=h2bbff1b_0
@@ -50,6 +49,7 @@ dependencies:
       - debugpy==1.8.14
       - decorator==5.2.1
       - defusedxml==0.7.1
+      - deprecated==1.2.18
       - docutils==0.21.2
       - exceptiongroup==1.2.2
       - executing==2.2.0
@@ -60,6 +60,7 @@ dependencies:
       - gast==0.4.0
       - gitdb==4.0.12
       - gitpython==3.1.44
+      - google==3.0.0
       - google-auth==2.40.1
       - google-auth-oauthlib==0.4.6
       - google-pasta==0.2.0
@@ -70,6 +71,7 @@ dependencies:
       - httpx==0.28.1
       - id==1.5.0
       - idna==3.10
+      - imageio==2.37.0
       - importlib-metadata==8.7.0
       - importlib-resources==6.5.2
       - ipykernel==6.29.5
@@ -98,10 +100,13 @@ dependencies:
       - jupyterlab-pygments==0.3.0
       - jupyterlab-server==2.27.3
       - jupyterlab-widgets==3.0.15
+      - kaggle==1.7.4.5
+      - kagglehub==0.3.12
       - keras==2.10.0
       - keras-preprocessing==1.1.2
       - keyring==25.6.0
       - kiwisolver==1.4.7
+      - lazy-loader==0.4
       - libclang==18.1.1
       - lxml==5.4.0
       - markdown==3.8
@@ -117,6 +122,7 @@ dependencies:
       - nbconvert==7.16.6
       - nbformat==5.10.4
       - nest-asyncio==1.6.0
+      - networkx==3.2.1
       - nh3==0.2.21
       - notebook==7.4.2
       - notebook-shim==0.2.4
@@ -130,6 +136,7 @@ dependencies:
       - pandocfilters==1.5.1
       - parso==0.8.4
       - pillow==11.2.1
+      - pip==25.1.1
       - platformdirs==4.3.8
       - prometheus-client==0.21.1
       - prompt-toolkit==3.0.51
@@ -146,6 +153,7 @@ dependencies:
       - pyparsing==3.2.3
       - python-dateutil==2.9.0.post0
       - python-json-logger==3.3.0
+      - python-slugify==8.0.4
       - pytz==2025.2
       - pywin32==310
       - pywin32-ctypes==0.2.3
@@ -164,6 +172,7 @@ dependencies:
       - rich==14.0.0
       - rpds-py==0.24.0
       - rsa==4.9.1
+      - scikit-image==0.24.0
       - scikit-learn==1.0.2
       - scipy==1.13.1
       - seaborn==0.13.2
@@ -184,7 +193,10 @@ dependencies:
       - tensorflow-object-detection-api==0.1.1
       - termcolor==3.1.0
       - terminado==0.18.1
+      - text-unidecode==1.3
+      - tf-keras-vis==0.8.7
       - threadpoolctl==3.6.0
+      - tifffile==2024.8.30
       - tinycss2==1.4.0
       - toml==0.10.2
       - tomli==2.2.1
