@@ -172,14 +172,14 @@ def build_vgg16_from_scratch(input_shape=(IMG_SIZE, IMG_SIZE, 3)):
 
     model.add(layers.Flatten())
 
-    # ➤ Déplacer les couches denses sur le CPU
+    # Déplacer les couches denses sur le CPU
     with tf.device('/CPU:0'):
         model.add(layers.Dense(4096, activation='relu', kernel_regularizer=l2_reg))
         model.add(layers.Dropout(0.5))
         model.add(layers.Dense(4096, activation='relu', kernel_regularizer=l2_reg))
         model.add(layers.Dropout(0.5))
 
-    # ➤ La dernière couche peut rester sur GPU
+    #  La dernière couche sur GPU
     model.add(layers.Dense(1, activation='sigmoid', dtype='float32'))
 
     return model
