@@ -109,7 +109,7 @@ def process_path(filename, label):
     # Data augmentation (only for training)
     img = tf.image.random_flip_left_right(img)
     img = tf.image.random_brightness(img, max_delta=0.1)
-    img = tf.image.random_zoom(img, (0.85, 1.15)) if hasattr(tf.image, "random_zoom") else img  # For TF 2.10+, remove if not supported
+    img = tf.image.random_zoom(img, (0.85, 1.15)) if hasattr(tf.image, "random_zoom") else img
     img = tf.image.resize(img, [IMG_SIZE, IMG_SIZE])
 
     return img, label
