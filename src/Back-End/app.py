@@ -37,7 +37,7 @@ def predict_radio(X: np.ndarray) -> float:
     z = np.dot(w_radio.T, x_flat) + b_radio
     return float(sigmoid(z))
 
-@app.route('/uploads/<path:filename>')
+@app.route('src/uploads/<path:filename>')
 def serve_uploads(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
