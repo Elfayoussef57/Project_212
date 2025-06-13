@@ -11,4 +11,4 @@ try:
     json_data = response.json()
     print(json_data)
 except Exception as e:
-    print("❌ Erreur lors du décodage JSON:", e)
+    print("Erreur lors du décodage JSON:", e)

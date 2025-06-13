@@ -1,10 +1,17 @@
 import sys
 import os
 from flask import Flask, request, jsonify, send_from_directory
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
+from tensorflow.keras.models import load_model #type: ignore
+from tensorflow.keras.preprocessing import image #type: ignore
 import numpy as np
 from PIL import Image
+from flask_cors import CORS
+from flask import send_from_directory
+from urllib.parse import unquote
+import uuid
+import tensorflow as tf
+import gc
+
 
 # Configuration des chemins
 BASE_DIR = os.path.abspath(r'C:\Users\ASUS\Pneumonia_Project')
@@ -13,12 +20,20 @@ NOTEBOOK_DIR = os.path.join(BASE_DIR, 'my_notebook')
 if NOTEBOOK_DIR not in sys.path:
     sys.path.append(NOTEBOOK_DIR)
 
-from utils import dicom_to_png
+from utils import dicom_to_png #type: ignore
 from predictor import predict_and_heatmap
+
+
+def sanitize_filename(original_name):
+    # Garder l'extension
+    ext = os.path.splitext(original_name)[-1]
+    # Générer un nom unique
+    return f"{uuid.uuid4().hex}{ext}"
 
 app = Flask(__name__)
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+CORS(app)
 
 # Charger les modèles
 weights = np.load(os.path.join(BASE_DIR, 'models', 'logistic_model_weights.npz'))
@@ -29,6 +44,16 @@ pneumonia_model = load_model(os.path.join(BASE_DIR, 'models', 'my_model_vggv2.h5
 MODEL_RADIO_SIZE = (64, 64)
 MODEL_PNEUMONIA_SIZE = (128, 128)
 
+def cleanup_upload_folder():     #si on veux ajouter une fonction d'historisation on va devoir effacer cette fonction
+    for filename in os.listdir(UPLOAD_FOLDER):
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            app.logger.error(f"Erreur lors de la suppression de {file_path}: {str(e)}")
+
+
 def sigmoid(z: np.ndarray) -> np.ndarray:
     return 1.0 / (1.0 + np.exp(-z))
 
@@ -37,23 +62,25 @@ def predict_radio(X: np.ndarray) -> float:
     z = np.dot(w_radio.T, x_flat) + b_radio
     return float(sigmoid(z))
 
-@app.route('src/uploads/<path:filename>')
+@app.route('/uploads/<path:filename>')
 def serve_uploads(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
+    # Décoder le nom de fichier pour gérer les espaces et caractères spéciaux
+    decoded_filename = unquote(filename)
+    return send_from_directory(UPLOAD_FOLDER, decoded_filename)
 
 @app.route('/api/analyze-scan', methods=['POST'])
 def predict():
     try:
+        cleanup_upload_folder()
         file = request.files.get('file')
         if not file:
             return jsonify({'error': 'No file uploaded'}), 400
 
         # Sauvegarder le fichier
-        filename = file.filename
-        ext = os.path.splitext(filename)[1].lower()
+        ext = os.path.splitext(file.filename)[1].lower()
+        filename = sanitize_filename(file.filename)  # nom sécurisé, sans espace ni accent
         input_path = os.path.join(UPLOAD_FOLDER, filename)
         file.save(input_path)
-
         # Conversion DICOM -> PNG si nécessaire
         if ext == '.dcm':
             png_path = dicom_to_png(input_path, output_dir=UPLOAD_FOLDER)
@@ -82,6 +109,9 @@ def predict():
 
         if radio_prob > 0.5:
             app.logger.info(f"Image rejetée par le modèle radio. Proba: {radio_prob:.4f}")
+            # Nettoyage mémoire
+            del img_radio, img_radio_array, radio_input
+            gc.collect()
             return jsonify({
                 'result': 'Image non valide (pas une radio)',
                 'confidence': round(radio_prob, 4)
@@ -104,6 +134,11 @@ def predict():
             UPLOAD_FOLDER,
             pneumonia_model
         )
+        # Nettoyage mémoire
+        del img_radio, img_radio_array, radio_input
+        del img_pneumonia, img_pneumonia_array, img_pil
+        gc.collect()
+
 
         return jsonify({
             'result': label,
@@ -112,6 +147,7 @@ def predict():
             'resized_image_url': f'/uploads/{pneumonia_filename}',
             'heatmap_url': f'/uploads/{os.path.basename(heatmap_path)}'
         })
+
 
     except Exception as e:
         import traceback
