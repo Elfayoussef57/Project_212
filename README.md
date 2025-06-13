@@ -6,9 +6,8 @@ Ce projet est une application web complète (Front-end + Back-end) conçue pour 
 
 1. **Vérification de l’image** : Vérifie si l’image soumise est bien une radiographie thoracique ou non (filtrage d’images hors-contexte).
 2. **Détection de la pneumonie** : Classifie les radiographies valides en trois catégories :
-   - `Normal`
-   - `No Lung Opacity / Not Normal`
-   - `Lung Opacity (Pneumonia)`
+   - `Pneumonia (Lung Opacity)`
+   - `Not-Pneumonia (Normal/No Lung Opacity)`
 
 ---
 
@@ -40,26 +39,26 @@ Ce projet est une application web complète (Front-end + Back-end) conçue pour 
 
 ## Structure du projet
 Pneumonia_Project/
-│
-├── src/
-│ ├── Front-End/ # Interface utilisateur Vue.js
-│ ├── Back-End/ # API Flask avec les modèles
-|
-├── my_notebook/ # Fonctions ML/IA, CAM, utils
-│
-├── models/
-│ ├── logistic_model_weights.npz
-│ └── my_model_vggv2.h5
-│
-├── data/ # Datasets utilisés
-│ ├── RSNA/
-│ └── Verification_data/
-|
-├── output/  #the results
-|
-├── requirements.txt
-├── envirenement.yml
-└── README.md
+- │
+- ├── src/
+- │ ├── Front-End/ # Interface utilisateur Vue.js
+- │ ├── Back-End/ # API Flask avec les modèles
+- |
+- ├── my_notebook/ # Fonctions ML/IA, CAM, utils
+- │
+- ├── models/
+- │ ├── logistic_model_weights.npz
+- │ └── my_model_vggv2.h5
+- │
+- ├── data/ # Datasets utilisés
+- │ ├── RSNA/
+- │ └── Verification_data/
+- |
+- ├── output/  #the results
+- |
+- ├── requirements.txt
+- ├── envirenement.yml
+- └── README.md
 
 ## Resultat d'entraînement du model de détection
 ![Training-Validation Accuracy and loss](image.png)
