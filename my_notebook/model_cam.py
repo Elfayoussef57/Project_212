@@ -38,7 +38,7 @@ def generate_gradcam(model, img_array, class_index, last_conv_layer):
     cam = gradcam(score, img_array, penultimate_layer=last_conv_layer)
     return cam[0]
 
-def overlay_heatmap_on_image(heatmap, image_path, display_size=(224,224), alpha=0.4):
+def overlay_heatmap_on_image(heatmap, image_path, save_path=None, display_size=(224,224), alpha=0.4):
     pil_img = Image.open(image_path).convert("RGB")
     pil_img = pil_img.resize(display_size)
     original_image = np.array(pil_img)
@@ -48,8 +48,16 @@ def overlay_heatmap_on_image(heatmap, image_path, display_size=(224,224), alpha=
     heatmap = np.uint8(255 * heatmap)
     heatmap_colored = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
 
+        # Fusionner image + heatmap
     overlay = cv2.addWeighted(original_image, 1 - alpha, heatmap_colored, alpha, 0)
-    return original_image, overlay
+
+    # Si un chemin est fourni, sauvegarder
+    if save_path:
+        cv2.imwrite(save_path, overlay)
+        return save_path
+    else:
+        return overlay  # Option utile pour visualiser dans un notebook
+
 
 
 def display_images(original, cam_image):
