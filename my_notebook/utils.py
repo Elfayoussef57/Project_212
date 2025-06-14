@@ -85,8 +85,3 @@ def predict_with_heatmap(image_path):
 
     plt.tight_layout()
     plt.show()
-
-# 🏁 Entry point
-if __name__ == "__main__":
-    image_path = "../../Downloads/WhatsApp Image 2025-06-03 à 11.02.08_0ebe368b.jpg"
-    predict_with_heatmap(image_path)
