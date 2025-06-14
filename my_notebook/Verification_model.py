@@ -3,9 +3,31 @@ import numpy as np
 import copy
 from PIL import Image
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 # === Logistic Regression Functions ===
 
+def plot_learning_curve(costs, learning_rate):
+    plt.figure(figsize=(8, 5))
+    plt.plot(costs)
+    plt.ylabel('Cost')
+    plt.xlabel('Iterations (per hundreds)')
+    plt.title(f'Learning rate = {learning_rate}')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+# === Matrice de confusion ===
+def plot_confusion_matrix(y_true, y_pred, title="Confusion Matrix"):
+    cm = confusion_matrix(y_true, y_pred)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Non-Radio", "Radio"])
+    disp.plot(cmap=plt.cm.Blues)
+    plt.title(title)
+    plt.tight_layout()
+    plt.show()
+
+# === Logistic Regression Implementation ===
 def sigmoid(z):
     s = 1 / (1 + np.exp(-z))
     return s
@@ -107,34 +129,35 @@ def preprocess_data(X, Y):
 
 def main():
     # Configuration
-    csv_path = '../data/Verif_data/all_images_labels.csv'  # Your CSV file with columns 'filepath', 'label'
-    root_dir = '../data/Verif_data'                      # Root directory of images
-    image_size = (64, 64)               # Resize all images to 64x64
+    csv_path = '../data/Verif_data/all_images_labels.csv'
+    root_dir = '../data/Verif_data'
+    image_size = (64, 64)
 
     print("Loading images and labels from CSV...")
     X, Y = load_images_from_csv(csv_path, root_dir, image_size)
     print(f"Loaded {X.shape[0]} images of size {X.shape[1:]}")
 
-    # Split into train/test sets
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
 
-    # Preprocess images
     X_train_prep, Y_train_prep = preprocess_data(X_train, Y_train)
     X_test_prep, Y_test_prep = preprocess_data(X_test, Y_test)
 
     print(f"Training data shape: {X_train_prep.shape}, labels shape: {Y_train_prep.shape}")
     print(f"Testing data shape: {X_test_prep.shape}, labels shape: {Y_test_prep.shape}")
 
-    # Train model
+    # === Entraînement ===
     d = model(X_train_prep, Y_train_prep, X_test_prep, Y_test_prep,
               num_iterations=2000, learning_rate=0.005, print_cost=True)
 
     print("Training finished!")
-    print(f"Final train accuracy: {100 - np.mean(np.abs(d['Y_prediction_train'] - Y_train_prep)) * 100} %")
-    print(f"Final test accuracy: {100 - np.mean(np.abs(d['Y_prediction_test'] - Y_test_prep)) * 100} %")
+    print(f"Final train accuracy: {100 - np.mean(np.abs(d['Y_prediction_train'] - Y_train_prep)) * 100:.2f} %")
+    print(f"Final test accuracy: {100 - np.mean(np.abs(d['Y_prediction_test'] - Y_test_prep)) * 100:.2f} %")
     np.savez('../models/logistic_model_weights.npz', w=d['w'], b=d['b'])
     print("Model weights saved to logistic_model_weights.npz")
 
+    # === Visualisations ===
+    plot_learning_curve(d["costs"], d["learning_rate"])
+    plot_confusion_matrix(Y_test_prep.flatten(), d["Y_prediction_test"].flatten(), title="Test Set Confusion Matrix")
 
 if __name__ == "__main__":
     main()
