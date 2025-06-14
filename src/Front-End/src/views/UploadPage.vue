@@ -1,8 +1,8 @@
 <template>
   <div class="page upload-page">
     <div class="container">
-      <h1 class="page-title">Upload Medical Image</h1>
-      <p class="page-subtitle">Please upload a clear, high-resolution medical image for analysis</p>
+      <h1 class="page-title">Entrer Une Image Médicale</h1>
+      <p class="page-subtitle">Veuillez téléverser une image médicale claire et en haute résolution pour l’analyse.</p>
 
       <div 
         class="upload-area" 
@@ -16,16 +16,16 @@
           <div class="upload-icon">
             <UploadIcon />
           </div>
-          <h3 class="upload-title">Drag and drop your image here or click to browse</h3>
-          <p class="upload-subtitle">Supports JPG, PNG, DICOM, and other medical image formats</p>
+          <h3 class="upload-title">Glissez-déposez votre image ici ou cliquez pour parcourir vos fichiers.</h3>
+          <p class="upload-subtitle">Prend en charge les formats JPG, PNG, DICOM et autres formats d’images médicales.</p>
         </div>
 
         <div v-if="selectedFile" class="file-preview">
           <div class="file-info">
-            <div class="success-message">File selected:</div>
+            <div class="success-message">Fichier Sélectionner:</div>
             <div class="file-name">{{ selectedFile.name }}</div>
             <img v-if="previewUrl" :src="previewUrl" alt="Preview" class="preview-image" />
-            <button class="remove-file-btn" @click.stop="removeFile">Remove file</button>
+            <button class="remove-file-btn" @click.stop="removeFile">Supprimer le Fichier</button>
           </div>
         </div>
 

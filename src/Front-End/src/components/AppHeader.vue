@@ -1,17 +1,20 @@
 <template>
   <header class="header">
     <div class="container">
-      <router-link to="/" class="logo">RAD-EYE</router-link>
+      <router-link to="/" class="logo">
+        <img src="../assets/logo.jpg" alt="RAD-EYE Logo" class="logo-image" />
+        <span class="logo-text">RAD-EYE</span>
+      </router-link>
       <nav class="nav">
         <ul>
           <li>
-            <router-link to="/" class="nav-link">Home</router-link>
+            <router-link to="/" class="nav-link">Accueil</router-link>
           </li>
           <li>
-            <router-link to="/upload" class="nav-link">Upload</router-link>
+            <router-link to="/upload" class="nav-link">Analyser</router-link>
           </li>
           <li>
-            <router-link to="/about" class="nav-link">About</router-link>
+            <router-link to="/about" class="nav-link">À propos</router-link>
           </li>
         </ul>
       </nav>
@@ -21,56 +24,68 @@
 
 <script>
 export default {
-  name: 'AppHeader'
+  name: 'AppHeader',
 }
 </script>
 
 <style scoped>
 .header {
-  border-bottom: 1px solid #e5e7eb;
-  background: white;
+  background-color: #f0f0f0;
+  padding: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.header .container {
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
+}
+
+.nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.nav li {
+  margin-left: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #7c3aed;
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   font-size: 24px;
   font-weight: bold;
   color: #7c3aed;
   text-decoration: none;
 }
 
-.nav ul {
-  display: flex;
-  list-style: none;
-  gap: 24px;
+.logo-image {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
-.nav-link {
-  text-decoration: none;
-  color: #374151;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.nav-link:hover,
-.router-link-active {
+.logo-text {
+  font-size: 24px;
+  font-weight: bold;
   color: #7c3aed;
-}
-
-@media (max-width: 768px) {
-  .header .container {
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .nav ul {
-    gap: 16px;
-  }
 }
 </style>

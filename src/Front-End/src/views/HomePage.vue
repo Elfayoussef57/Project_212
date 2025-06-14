@@ -2,7 +2,7 @@
   <div class="page home-page">
     <div class="container">
       <h1 class="main-title">Bienvenue à RAD-EYE</h1>
-      <p class="subtitle">Upload medical images for instant AI-powered analysis and diagnosis assistance.</p>
+      <p class="subtitle">Téléversez des images médicales pour une analyse instantanée assistée par l’IA et une aide au diagnostic.</p>
 
       <div class="features-grid">
         <FeatureCard
@@ -17,7 +17,7 @@
 
       <div class="cta-section">
         <router-link to="/upload" class="btn-primary">
-          Get Started
+          Démarrer
         </router-link>
       </div>
     </div>
@@ -34,29 +34,30 @@ export default {
   },
   data() {
     return {
-      features: [
-        {
-          id: 1,
-          icon: 'upload',
-          iconColor: 'purple',
-          title: 'Easy Upload',
-          description: 'Securely upload medical images in any common format'
-        },
-        {
-          id: 2,
-          icon: 'brain',
-          iconColor: 'cyan',
-          title: 'AI Analysis',
-          description: 'Advanced neural networks analyze your images'
-        },
-        {
-          id: 3,
-          icon: 'document',
-          iconColor: 'pink',
-          title: 'Detailed Reports',
-          description: 'Generate comprehensive patient reports'
-        }
-      ]
+    features: [
+      {
+        id: 1,
+        icon: 'upload',
+        iconColor: 'purple',
+        title: 'Téléversement Facile',
+        description: 'Téléversez en toute sécurité des images médicales dans tous les formats courants'
+      },
+      {
+        id: 2,
+        icon: 'brain',
+        iconColor: 'cyan',
+        title: 'Analyse par IA',
+        description: 'Des réseaux neuronaux avancés analysent vos images'
+      },
+      {
+        id: 3,
+        icon: 'document',
+        iconColor: 'pink',
+        title: 'Rapports Détaillés',
+        description: 'Générez des rapports complets pour les patients'
+      }
+    ]
+
     }
   }
 }
